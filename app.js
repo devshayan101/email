@@ -3,7 +3,8 @@ const bodyParser = require('body-parser');
 const exphbs = require('express-handlebars');
 const path = require('path');
 const nodemailer = require('nodemailer');
-const dotenv = require('dotenv/config');
+const dotenv = require('dotenv');
+dotenv.config()
 const app = express();
 
 // View engine setup
