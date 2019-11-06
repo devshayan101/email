@@ -50,6 +50,7 @@ app.post('/send', (req, res) => {
         user: process.env.USER, // generated ethereal user
         pass: process.env.PASS // generated ethereal password
       }
+
     });
 
     // send mail with defined transport object
@@ -67,6 +68,7 @@ app.post('/send', (req, res) => {
     // Preview only available when sending through an Ethereal account
     console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
     // Preview URL: https://ethereal.email/message/WaQKMgKddxQDoou...
+    res.render('contact', { msg: 'Email has been sent' })
   }
 
   main().catch(console.error);
