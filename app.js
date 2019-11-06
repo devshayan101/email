@@ -44,14 +44,14 @@ app.post('/send', (req, res) => {
       user: process.env.USER, // generated ethereal user
       pass: process.env.PASS  // generated ethereal password
     },
-    tls: {
-      rejectUnauthorized: false
-    }
+    // tls: {
+    //   rejectUnauthorized: false
+    // }
   });
 
   // setup email data with unicode symbols
   let mailOptions = {
-    from: '"Msme-regss" <your@email.com>', // sender address
+    from: '"Msme-regss" <shayan.dev98@gmail.com>', // sender address
     to: 'shayan.dev101@gmail.com', // list of receivers
     subject: 'Your Form', // Subject line
     text: 'Hello Universe?', // plain text body
