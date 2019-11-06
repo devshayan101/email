@@ -3,8 +3,10 @@ const bodyParser = require('body-parser');
 const exphbs = require('express-handlebars');
 const path = require('path');
 const nodemailer = require('nodemailer');
-const dotenv = require('dotenv');
-dotenv.config()
+const dotenv = require('dotenv/config');
+const fs = require('fs-extra')
+const multer = require('multer')
+
 const app = express();
 
 // View engine setup
@@ -18,11 +20,27 @@ app.use('/public', express.static(path.join(__dirname, 'public')));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
+//File-Upload to server
+const storage = multer.diskStorage({
+  destination: './public/uploads/',
+  filename: function (req, file, cb) {
+    cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname));
+  }
+});
+
+//Init Upload
+const upload = multer({
+  storage: storage
+}).fields([{ name: 'aadhaarFile', maxCount: 1 },
+{ name: 'panFile', maxCount: 1 }]);
+
+
+//ROUTES
 app.get('/', (req, res) => {
   res.render('contact');
 });
 
-app.post('/send', (req, res) => {
+app.post('/send', upload, (req, res, err) => {
   const output = `
     <p>You have a new contact request</p>
     <h3>Contact Details</h3>
@@ -48,6 +66,9 @@ app.post('/send', (req, res) => {
     <h3>Message</h3>
     <p>${req.body.message}</p>
   `;
+
+  let imgPath = req.files.panFile[0].path;
+  let imgPathString = imgPath.toString();
   // async..await is not allowed in global scope, must use a wrapper
   async function main() {
     // Generate test SMTP service account from ethereal.email
@@ -66,19 +87,26 @@ app.post('/send', (req, res) => {
 
     });
 
+
+
     // send mail with defined transport object
     //This is Admin Mailing.
     let infoAdmin = await transporter.sendMail({
-      from: '"Fred Foo 👻" <foo@example.com>', // sender address
-      to: 'shayan.dev98@gmail.com', // list of receivers
+      from: '"Fred Foo" <foo@example.com>', // sender address
+      to: 'shayan.devtest@gmail.com', // list of receivers
       subject: 'Hello ✔', // Subject line
       text: 'Hello world?', // plain text body
-      html: output // html body
+      html: output, // html body
+      attachments: [
+        {
+
+        }
+      ]
     });
 
     //This is customer mailing.
     let infoCust = await transporter.sendMail({
-      from: '"Fred Foo 👻" <foo@example.com>', // sender address
+      from: '"Fred Foo" <foo@example.com>', // sender address
       to: `${req.body.email}`, // list of receivers
       subject: 'Hello ✔', // Subject line
       text: 'Hello world?', // plain text body
