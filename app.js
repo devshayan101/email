@@ -70,14 +70,6 @@ app.post('/send', (req, res) => {
     //This is Admin Mailing.
     let infoAdmin = await transporter.sendMail({
       from: '"Fred Foo 👻" <foo@example.com>', // sender address
-      to: 'cubixquirrel@gmail.com', // list of receivers
-      subject: 'Hello ✔', // Subject line
-      text: 'Hello world?', // plain text body
-      html: output // html body
-    });
-
-    await transporter.sendMail({
-      from: '"Fred Foo 👻" <foo@example.com>', // sender address
       to: 'shayan.dev98@gmail.com', // list of receivers
       subject: 'Hello ✔', // Subject line
       text: 'Hello world?', // plain text body
@@ -93,24 +85,12 @@ app.post('/send', (req, res) => {
       html: userOutput // html body
     });
 
-    console.log('Message sent: %s', infoAdmin.messageId);
-    // Message sent: <b658f8ca-6296-ccf4-8306-87d57a0b4321@example.com>
-
-    // Preview only available when sending through an Ethereal account
-    console.log('Preview URL: %s', nodemailer.getTestMessageUrl(infoAdmin));
-    // Preview URL: https://ethereal.email/message/WaQKMgKddxQDoou...
-
-    console.log('Message sent: %s', infoCust.messageId);
-    // Message sent: <b658f8ca-6296-ccf4-8306-87d57a0b4321@example.com>
-
-    // Preview only available when sending through an Ethereal account
-    console.log('Preview URL: %s', nodemailer.getTestMessageUrl(infoCust));
-    // Preview URL: https://ethereal.email/message/WaQKMgKddxQDoou...
-    res.render('contact', { msg: 'Email has been sent' })
+    const msgSubmit = 'Email has been sent';
+    res.render('contact', { msg: msgSubmit })
   }
 
   main().catch(console.error);
-  //res.render('contact', { msg: 'Email has been sent' });
+
 });
 
 app.listen(process.env.PORT, () => console.log(`Server started on Port ${process.env.PORT}`));
