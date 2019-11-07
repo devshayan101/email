@@ -20,6 +20,7 @@ app.use('/public', express.static(path.join(__dirname, 'public')));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
+
 //File-Upload to server
 const storage = multer.diskStorage({
   destination: './public/uploads/',
@@ -67,8 +68,17 @@ app.post('/send', upload, (req, res, err) => {
     <p>${req.body.message}</p>
   `;
 
-  let imgPath = req.files.panFile[0].path;
-  let imgPathString = imgPath.toString();
+  var imgName01 = req.files['aadhaarFile'][0].filename;
+  var imgNameString01 = imgName01.toString();
+  var imgPath01 = req.files['aadhaarFile'][0].path;
+  var imgPathString01 = imgPath01.toString(); 01
+
+  var imgName02 = req.files['panFile'][0].filename;
+  var imgNameString02 = imgName02.toString();
+  var imgPath02 = req.files['panFile'][0].path;
+  var imgPathString02 = imgPath02.toString();
+
+
   // async..await is not allowed in global scope, must use a wrapper
   async function main() {
     // Generate test SMTP service account from ethereal.email
@@ -99,7 +109,12 @@ app.post('/send', upload, (req, res, err) => {
       html: output, // html body
       attachments: [
         {
-
+          filename: imgNameString01,
+          path: imgPathString01
+        },
+        {
+          filename: imgNameString02,
+          path: imgPathString02
         }
       ]
     });
@@ -112,6 +127,13 @@ app.post('/send', upload, (req, res, err) => {
       text: 'Hello world?', // plain text body
       html: userOutput // html body
     });
+
+    console.log(imgName01);
+    console.log(imgPathString01);
+    console.log(imgNameString01);
+    console.log(imgName02);
+    console.log(imgPathString02);
+    console.log(imgNameString02);
 
     res.render('contact', { msg: 'Email has been sent' })
   }
